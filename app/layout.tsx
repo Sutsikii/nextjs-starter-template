@@ -21,10 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" suppressHydrationWarning>
-      <body
-        className={`${robotoMono.variable} antialiased`}
-      >
+    <html lang="fr" className={`${robotoMono.className} antialiased`} suppressHydrationWarning>
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
