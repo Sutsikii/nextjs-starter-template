@@ -8,4 +8,4 @@ export function Header() {
             <ModeToggle />
         </header>
     )
-}
+    }

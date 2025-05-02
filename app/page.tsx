@@ -1,7 +1,7 @@
-export default function Home() {
+export default function SidebarPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-      <h1>NextJS template</h1>
+    <div>
+      <h1>Home</h1>
     </div>
-  );
+  )
 }
