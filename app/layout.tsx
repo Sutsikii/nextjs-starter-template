@@ -6,6 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { AppBreadcrumb } from "@/components/breadcrumb/app-breadcrumb";
+import { cookies } from "next/headers";
 
 const robotoMono = Roboto_Mono({
   variable: "--font-roboto-mono",
@@ -18,11 +19,15 @@ export const metadata: Metadata = {
   description: "A starter kit to develop faster with nextjs",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies()
+  const sidebarState = cookieStore.get("sidebar_state")
+  const defaultOpen = sidebarState ? sidebarState.value === "true" : true
+
   return (
     <html lang="fr" className={`${robotoMono.className} antialiased`} suppressHydrationWarning>
       <body>
@@ -32,7 +37,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
+        <SidebarProvider defaultOpen={defaultOpen}>
             <div className="flex h-screen">
               <AppSidebar />
               <div className="flex flex-1 flex-col">

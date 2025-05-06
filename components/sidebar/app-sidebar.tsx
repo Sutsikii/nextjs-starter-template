@@ -1,8 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import type * as React from "react"
-import { Bell, ChevronDown, Home, Layers, LayoutDashboard, Mail, Settings, Users } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 
 import { NavUser } from "./nav-user"
 import { Badge } from "@/components/ui/badge"
@@ -23,82 +23,51 @@ import {
 } from "@/components/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-interface NavSubItem {
-  title: string
-  url: string
-}
-
-interface NavItem {
-  title: string
-  icon: React.ComponentType<{ className?: string }>
-  url: string
-  notifications: number
-  subItems?: NavSubItem[]
-}
-
-interface NavGroup {
-  title: string
-  items: NavItem[]
-}
-
-const data: {
-  user: {
-    name: string
-    email: string
-    avatar: string
-  }
-  navigation: NavGroup[]
-} = {
-  user: {
-    name: "Jean Dupont",
-    email: "jean.dupont@example.com",
-    avatar: "/placeholder.svg?height=32&width=32",
-  },
-  navigation: [
-    {
-      title: "Tableau de bord",
-      items: [
-        { title: "Accueil", icon: Home, url: "/", notifications: 0 },
-        { title: "Statistiques", icon: LayoutDashboard, url: "#", notifications: 0 },
-      ],
-    },
-    {
-      title: "Applications",
-      items: [
-        { title: "Messages", icon: Mail, url: "#", notifications: 12 },
-        { title: "Notifications", icon: Bell, url: "#", notifications: 5 },
-        {
-          title: "Projets",
-          icon: Layers,
-          url: "#",
-          notifications: 0,
-          subItems: [
-            { title: "Projets étudiant", url: "#/projets/etudiant" },
-            { title: "Projets pro", url: "#/projets/pro" },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Administration",
-      items: [
-        { title: "Utilisateurs", icon: Users, url: "/users", notifications: 0 },
-        { title: "Paramètres", icon: Settings, url: "#", notifications: 0 },
-      ],
-    },
-  ],
-}
+import { data } from "@/data/nav"
+// Constantes pour la gestion des cookies
+const SIDEBAR_SUBMENU_COOKIE_NAME = "sidebar:submenus"
+const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 30 // 30 jours
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [openSubMenus, setOpenSubMenus] = useState<Record<string, boolean>>({})
   const { state } = useSidebar()
   const isCollapsed = state === "collapsed"
 
+  useEffect(() => {
+    const loadSubMenuState = () => {
+      const cookieValue = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith(`${SIDEBAR_SUBMENU_COOKIE_NAME}=`))
+        ?.split("=")[1]
+
+      if (cookieValue) {
+        try {
+          const parsedState = JSON.parse(decodeURIComponent(cookieValue))
+          setOpenSubMenus(parsedState)
+        } catch (e) {
+          console.error("Erreur lors du chargement de l'état des sous-menus:", e)
+        }
+      }
+    }
+
+    loadSubMenuState()
+  }, [])
+
+  // Fonction pour basculer l'état d'un sous-menu
   const toggleSubMenu = (itemTitle: string) => {
-    setOpenSubMenus((prev) => ({
-      ...prev,
-      [itemTitle]: !prev[itemTitle],
-    }))
+    setOpenSubMenus((prev) => {
+      const newState = {
+        ...prev,
+        [itemTitle]: !prev[itemTitle],
+      }
+
+      // Sauvegarder l'état des sous-menus dans un cookie
+      document.cookie = `${SIDEBAR_SUBMENU_COOKIE_NAME}=${encodeURIComponent(
+        JSON.stringify(newState),
+      )}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+
+      return newState
+    })
   }
 
   return (
