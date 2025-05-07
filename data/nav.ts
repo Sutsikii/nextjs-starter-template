@@ -1,4 +1,4 @@
-import { Bell, ChevronDown, Home, Layers, LayoutDashboard, Mail, Settings, Users } from "lucide-react"
+import { Bell, Box, ChevronDown, Home, Layers, LayoutDashboard, Mail, Settings, Users } from "lucide-react"
 interface NavGroup {
     title: string
     items: NavItem[]
@@ -8,7 +8,7 @@ interface NavItem {
     title: string
     icon: React.ComponentType<{ className?: string }>
     url: string
-    notifications: number
+    notifications?: number
     subItems?: NavSubItem[]
 }
 
@@ -35,8 +35,23 @@ export const data: {
       {
         title: "Tableau de bord",
         items: [
-          { title: "Accueil", icon: Home, url: "/", notifications: 0 },
-          { title: "Statistiques", icon: LayoutDashboard, url: "#", notifications: 0 },
+          { title: "Accueil", icon: Home, url: "/"  },
+        ],
+      },
+      {
+        title: "Docker",
+        items: [
+          { 
+            title: "Docker", 
+            icon: Box, 
+            url: "/docker",
+            subItems: [
+              { title: "Images", url: "/docker/images" },
+              { title: "Containers", url: "/docker/containers" },
+              { title: "Volumes", url: "/docker/volumes" },
+              { title: "Networks", url: "/docker/networks" },
+            ],
+          },
         ],
       },
       {
@@ -48,7 +63,6 @@ export const data: {
             title: "Projets",
             icon: Layers,
             url: "#",
-            notifications: 0,
             subItems: [
               { title: "Projets étudiant", url: "#/projets/etudiant" },
               { title: "Projets pro", url: "#/projets/pro" },
@@ -59,8 +73,8 @@ export const data: {
       {
         title: "Administration",
         items: [
-          { title: "Utilisateurs", icon: Users, url: "/users", notifications: 0 },
-          { title: "Paramètres", icon: Settings, url: "#", notifications: 0 },
+          { title: "Utilisateurs", icon: Users, url: "/users" },
+          { title: "Paramètres", icon: Settings, url: "#" },
         ],
       },
     ],

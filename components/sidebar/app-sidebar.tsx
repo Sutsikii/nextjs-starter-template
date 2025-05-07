@@ -108,12 +108,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           </Tooltip>
 
                           {openSubMenus[item.title] && !isCollapsed && (
-                            <div className="pl-6 mt-1 space-y-1">
+                            <div className="pl-4 mt-1 space-y-0.5 border-l border-border/50">
                               {item.subItems.map((subItem) => (
                                 <a
                                   key={subItem.title}
                                   href={subItem.url}
-                                  className="flex items-center py-1.5 px-2 text-sm rounded-md hover:bg-accent hover:text-accent-foreground"
+                                  className="flex items-center py-1.5 px-2 text-sm text-muted-foreground rounded-md hover:bg-accent hover:text-accent-foreground relative before:absolute before:left-[-3px] before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-[1px] before:bg-border/50"
                                 >
                                   {subItem.title}
                                 </a>
@@ -128,7 +128,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                               <a href={item.url}>
                                 <item.icon className="h-4 w-4" />
                                 <span className="group-data-[collapsible=icon]:hidden">{item.title}</span>
-                                {item.notifications > 0 && (
+                                {item.notifications && item.notifications > 0 && (
                                   <Badge className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs group-data-[collapsible=icon]:absolute group-data-[collapsible=icon]:right-1 group-data-[collapsible=icon]:top-1 group-data-[collapsible=icon]:h-4 group-data-[collapsible=icon]:min-w-4 group-data-[collapsible=icon]:p-0">
                                     {item.notifications}
                                   </Badge>
