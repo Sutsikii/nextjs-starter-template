@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
-import { Separator } from "@/components/ui/separator";
-import { AppBreadcrumb } from "@/components/breadcrumb/app-breadcrumb";
 import { cookies } from "next/headers";
+import { Header } from "@/components/layout/header";
 
 const robotoMono = Roboto_Mono({
   variable: "--font-roboto-mono",
@@ -38,19 +37,17 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
         <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
+          <SidebarInset className="relative">
             <div className="flex h-screen">
-              <AppSidebar />
               <div className="flex flex-1 flex-col">
-                <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-                  <SidebarTrigger className="-ml-1" />
-                  <Separator orientation="vertical" className="mr-2 h-4" />
-                  <AppBreadcrumb />
-                </header>
+                <Header />
                 <main className="flex-1 overflow-auto p-4">
                   {children}
                 </main>
               </div>
             </div>
+            </SidebarInset>
           </SidebarProvider>
         </ThemeProvider>
       </body>
